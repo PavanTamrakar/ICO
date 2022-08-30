@@ -23,7 +23,11 @@ contract GandhiMoneyToken is ERC20, Ownable {
     }
 
     function mint(uint256 amount) public payable{
-        
+        uint256 _requiredAmount = tokenPrice * amount;
+        require(msg.value >= _requiredAmount, "Ether sent is incorrect");
+        uint256 amountWithDecimals = amount * 10**18;
+        require((totalSupply() + amountWithDecimals) <= maxTotalSupply, "Exceeds the max total supply");
+        _mint(msg.sender, amountWithDecimals);
     }
 
     function claim() public {
